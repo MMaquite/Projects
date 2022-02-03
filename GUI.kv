@@ -1,0 +1,31 @@
+<MainScreen>:
+    CameraPreview:
+        resolution:(640, 480)
+        id: camera_preview
+        size: root.size
+
+    ImageButton:
+        preview: camera_preview
+        source: 'C:/Users/Melchor/PycharmProjects/pythonProject/capture.jpg'
+        size: 100, 100
+        center: root.width * 0.5, root.height * 0.2
+
+        padding:50
+        spacing:20
+    
+    Label:
+        preview: camera_preview
+        text:"Choose the button below that you want to click"
+        pos: 100, 100
+
+    Button:
+        preview: camera_preview
+        text:"Start"
+        pos_hint:{"center_x":.3,"center_y":.4,"left":.6}
+        size_hint:.2,.1
+
+    Button:
+        preview: camera_preview
+        text:"Exit"
+        pos_hint:{"center_x":.1,"center_y":.1,"right":.1}
+        size_hint:.2,.1

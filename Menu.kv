@@ -1,0 +1,97 @@
+<Widgetfacemask>:
+    canvas.before:
+        Color:
+            rgba: 236, 240, 241,1.0
+        Rectangle:
+            size: self.size
+    
+    Label:
+        text: "No Camera Preview"
+        # color
+        color: 44/255, 62/255, 80/255, 1
+
+        # position
+        pos_hint:{"center_x":.6,"center_y":.5,"left":1}
+        size_hint:1,1
+    
+    Label:
+        text: "FACE MASK DETECTOR"
+        # color
+        color: 44/255, 62/255, 80/255, 1
+
+        # position
+        pos_hint:{"center_x":.5,"center_y":.9,}
+        size_hint:1,1    
+
+    CameraPreview:
+        resolution:(.9, .9)
+        id: camera_preview
+
+        # position
+        pos_hint:{"center_x":.6,"center_y":.5,"left":1}
+        size_hint:1,1
+
+   
+    ToggleButton:
+        # label
+        text:"Start"
+        id:button_start
+        
+        # color
+        color: (236/255, 240/255, 241/255,1) 
+        background_normal:'' if self.state == "normal" else ''
+        background_color: (46/255, 204/255, 113/255,1.0) if self.state == "normal" else (231/255, 76/255, 60/255, 1)
+        
+        # position
+        pos_hint:{"x":0.01,"center_y":.66,"left":.1}
+        size_hint:.25,.1
+
+        #on press
+        on_state:root.button_start(self)
+
+    Button:
+        # label
+        text:"Train"
+        id:button_train
+        
+        # color
+        color:236/255, 240/255, 241/255,1
+        background_normal:''
+        background_color: 52/255, 152/255, 219/255,1
+        
+        # position
+        pos_hint:{"x":0.01,"center_y":.54,"left":.1}
+        size_hint:.25,.1
+        on_press:root.button_train(self)
+    
+    Button:
+        # label
+        text:"Option"
+        id:button_option
+        
+        # color
+        color:236/255, 240/255, 241/255,1
+        background_normal:''
+        background_color: 52/255, 152/255, 219/255,1
+        
+        # position
+        pos_hint:{"x":0.01,"center_y":.42,"left":.1}
+        size_hint:.25,.1
+        on_press:print("test")
+
+    Button:
+        #label 
+        text:"Exit"
+        id:button_exit
+
+        # color
+        color:236/255, 240/255, 241/255,1
+        background_normal:''
+        background_color: 231/255, 76/255, 60/255,1
+
+        # position
+        pos_hint:{"x":0.01,"center_y":.3,"left":.1}
+        size_hint:.25,.1
+
+        # on press
+        on_press:root.button_exit(self)
