@@ -15,6 +15,7 @@ from kivy.uix.behaviors import ButtonBehavior
 from kivy.properties import ObjectProperty
 from kivy.uix.widget import Widget
 from imutils.video import VideoStream
+from kivy.config import Config
 
 # modules
 import os
@@ -56,14 +57,14 @@ class Widgetfacemask(RelativeLayout):
             widget.text = "Stop"
             # disable all buttons
             self.ids.button_train.disabled = True
-            self.ids.button_option.disabled = True
+            #self.ids.button_option.disabled = True
             self.ids.button_exit.disabled = True
         else:
             isRunning = False
             widget.text = "Start"
             # enable all buttons
             self.ids.button_train.disabled = False
-            self.ids.button_option.disabled = False
+            #self.ids.button_option.disabled = False
             self.ids.button_exit.disabled = False
 
         print("IsRunning:"+widget.state)
@@ -89,11 +90,12 @@ class CameraPreview(Image):
         #self.capture = cv2.VideoCapture(0)
         self.capture = VideoStream(src=0).start()
         #Set drawing interval
-        Clock.schedule_interval(self.update, 1.0 / 30)
+        Clock.schedule_interval(self.update, 1.0 / 60)
 
     #Drawing method to execute at intervals
     def update(self, dt):
         global isRunning
+        
         if isRunning == True:
 
             # fix disable image on screen
@@ -102,8 +104,11 @@ class CameraPreview(Image):
             #Load frame
             frame = self.capture.read()
 
-            #Proccess our frame in startVideoFeed
-            self.frame = detect_mask_video.startVideoFeed(frame)
+            # Proccess our frame in startVideoFeed
+            self.frame = detect_mask_video.startVideoFeed(frame,int(kivy.core.window.Window.width),int(kivy.core.window.Window.height))
+
+            # Print Label
+            # print("DETECTED:"+label)
 
             #Convert our proccesed frame into Kivy Texture
             buf = cv2.flip(self.frame, 0).tobytes()

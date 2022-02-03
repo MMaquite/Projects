@@ -107,13 +107,14 @@ maskNet = load_model(args["model"])
 
 ###########################################################################
 # loop over the frames from the video stream
-def startVideoFeed(param):
+def startVideoFeed(param,w,h):
 	vs = param
 	#while True:
 	# grab the frame from the threaded video stream and resize it
 	# to have a maximum width of 400 pixels
 	frame = vs
-	frame = imutils.resize(frame, width=500)
+	#print("size"+str(w/2))
+	frame = imutils.resize(frame, width = 500)
 
 	# detect faces in the frame and determine if they are wearing a
 	# face mask or not
@@ -142,7 +143,7 @@ def startVideoFeed(param):
 
 	# show the output frame
 	# SHERDELLE -> EXPORT FRAME HERE 
-	return frame
+	return frame 
 	# cv2.imshow("Frame", frame) 
 	#key = cv2.waitKey(1) & 0xFF
 
