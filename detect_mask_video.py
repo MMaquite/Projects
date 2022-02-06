@@ -2,6 +2,7 @@
 # python detect_mask_video.py
 
 # import the necessary packages
+from cv2 import threshold
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
@@ -106,6 +107,7 @@ maskNet = load_model(args["model"])
 # time.sleep(2.0)
 
 ###########################################################################
+# 
 # loop over the frames from the video stream
 def startVideoFeed(param,w,h):
 	vs = param
@@ -119,7 +121,8 @@ def startVideoFeed(param,w,h):
 	# detect faces in the frame and determine if they are wearing a
 	# face mask or not
 	(locs, preds) = detect_and_predict_mask(frame, faceNet, maskNet)
-
+	
+	_checker = False 
 	# loop over the detected face locations and their corresponding
 	# locations
 	for (box, pred) in zip(locs, preds):
@@ -131,6 +134,19 @@ def startVideoFeed(param,w,h):
 		# the bounding box and text
 		label = "Mask" if mask > withoutMask else "No Mask"
 		color = (0, 255, 0) if label == "Mask" else (0, 0, 255)
+
+		# - sherdelle 
+		# CHECK IF MASK IS NOT ABOVE THE GIVEN THRESHOLD:
+		_label = label
+		# only 97% up will account as mask on 
+		# # we will use this to check if the mask is worn properly or not based on the accuracy of the current model.
+		
+		# since the model has a high accuracy we could just raise our threshold to determine the mask is worn properly
+		_threshold = 97.50
+		if label == "Mask" and max( mask, withoutMask) * 100 < _threshold: 
+			_checker = True
+			color = (0, 0, 255)
+			#print("Mask is not worn properly")
 			
 		# include the probability in the label
 		label = "{}: {:.2f}%".format(label, max(mask, withoutMask) * 100)
@@ -143,7 +159,9 @@ def startVideoFeed(param,w,h):
 
 	# show the output frame
 	# SHERDELLE -> EXPORT FRAME HERE 
-	return frame 
+	
+	return frame,_checker
+
 	# cv2.imshow("Frame", frame) 
 	#key = cv2.waitKey(1) & 0xFF
 

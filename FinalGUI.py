@@ -25,6 +25,7 @@ import detect_mask_video
 
 # globals
 isRunning = False
+checker = False
 
 Builder.load_file("Menu.kv")
 
@@ -33,11 +34,18 @@ class Widgetfacemask(RelativeLayout):
     perspective_point_x =NumericProperty(0)
     perspective_point_x =NumericProperty(0)
 
+    # well use this to make our alert popup when checker is True and return the state if our alert is clicked.
+    def update(self, dt):
+        global checker
+        if checker == True:
+            self.ids.button_mask.opacity=1
+
     # buttons
     button_start = True
  
     def __init__(self, **kw):
         super(Widgetfacemask,self).__init__(**kw)
+        Clock.schedule_interval(self.update, 1.0 / 30) # this will keep our update function running
         
     def on_size (self,*args):
         print("ON SIZE W:"+str(self.width)+"H"+str(self.height))
@@ -47,6 +55,13 @@ class Widgetfacemask(RelativeLayout):
 
     def on_perspective_point_y(self,widget,value):
         print("PY:"+str(value))
+    
+    # button alert
+    def button_mask(self, widget):
+        global checker
+        self.ids.button_mask.opacity = 0
+        checker = False
+       
     
     # button start
     def button_start(self, widget):
@@ -61,7 +76,7 @@ class Widgetfacemask(RelativeLayout):
             self.ids.button_exit.disabled = True
         else:
             isRunning = False
-            widget.text = "Start"
+            widget.text = "Start"   
             # enable all buttons
             self.ids.button_train.disabled = False
             #self.ids.button_option.disabled = False
@@ -71,7 +86,7 @@ class Widgetfacemask(RelativeLayout):
 
     def button_train(self,widget):
         print("Train Face Mask Detector")
-        os.system('start cmd /k "python ./train_mask_detector.py"')
+        #os.system('start cmd /k "python ./train_mask_detector.py"')
 
     # button_exit
     def button_exit(self,widget):
@@ -95,8 +110,9 @@ class CameraPreview(Image):
     #Drawing method to execute at intervals
     def update(self, dt):
         global isRunning
+        global checker
         
-        if isRunning == True:
+        if isRunning == True and checker == False:
 
             # fix disable image on screen
             self.opacity = 1
@@ -105,8 +121,11 @@ class CameraPreview(Image):
             frame = self.capture.read()
 
             # Proccess our frame in startVideoFeed
-            self.frame = detect_mask_video.startVideoFeed(frame,int(kivy.core.window.Window.width),int(kivy.core.window.Window.height))
+            self.frame, self._checker = detect_mask_video.startVideoFeed(frame,int(kivy.core.window.Window.width),int(kivy.core.window.Window.height))
+            checker = self._checker
 
+            # if self.checker is true raise an alert dialog 
+              # codes goes here i think.
             # Print Label
             # print("DETECTED:"+label)
 

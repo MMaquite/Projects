@@ -22,6 +22,8 @@
         #on press
         on_state:root.button_start(self)
 
+   
+
     Button:
         # label
         text:"Train"
@@ -97,3 +99,21 @@
         pos_hint:{"center_x":.6,"center_y":.5,"left":1}
         size_hint:1,1
 
+     # our alert dialog 
+    Button:
+        # label
+        text:"please wear your mask properly."
+        id:button_mask
+        opacity:0
+        
+        # color
+        color: 236/255, 240/255, 241/255,1
+        background_normal:'' 
+        background_color: (46/255, 204/255, 113/255,1.0) if self.state == "normal" else (231/255, 76/255, 60/255, 1)
+        
+        # position
+        pos_hint:{"center_x":.6,"center_y":.5,"left":1}
+        size_hint:.5,.2
+
+        #on press
+        on_press:root.button_mask(self)
