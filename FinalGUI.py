@@ -66,6 +66,7 @@ class Widgetfacemask(RelativeLayout):
     # button start
     def button_start(self, widget):
         global isRunning
+        global checker
         
         if widget.state != "normal":
             isRunning = True
@@ -77,6 +78,8 @@ class Widgetfacemask(RelativeLayout):
         else:
             isRunning = False
             widget.text = "Start"   
+            self.ids.button_mask.opacity=0
+            checker = False
             # enable all buttons
             self.ids.button_train.disabled = False
             #self.ids.button_option.disabled = False
