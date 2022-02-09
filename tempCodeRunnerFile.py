@@ -1,1 +1,1 @@
-button_alert
+ #self.capture.stop()

@@ -14,8 +14,13 @@ from kivy.clock import Clock
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.properties import ObjectProperty
 from kivy.uix.widget import Widget
+from kivy.uix.dropdown import DropDown
+from kivy.uix.button import Button
 from imutils.video import VideoStream
 from kivy.config import Config
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.screenmanager import Screen
 
 # modules
 import os
@@ -26,6 +31,7 @@ import detect_mask_video
 # globals
 isRunning = False
 checker = False
+current_model = ""
 
 Builder.load_file("Menu.kv")
 
@@ -62,7 +68,6 @@ class Widgetfacemask(RelativeLayout):
         self.ids.button_mask.opacity = 0
         checker = False
        
-    
     # button start
     def button_start(self, widget):
         global isRunning
@@ -85,11 +90,23 @@ class Widgetfacemask(RelativeLayout):
             #self.ids.button_option.disabled = False
             self.ids.button_exit.disabled = False
 
-        print("IsRunning:"+widget.state)
-
     def button_train(self,widget):
-        print("Train Face Mask Detector")
-        #os.system('start cmd /k "python ./train_mask_detector.py"')
+        print("[]Train Face Mask Detector")
+        os.system('start cmd /k "python ./train_mask_detector.py"')
+        
+
+    #spinner
+    def spinner_clicked(self, value):
+        global current_model
+        current_model = value
+        detect_mask_video.reload_model(value)
+        self.ids.click_label.text = value
+        
+    
+    #get models
+    def get_model(self):
+        models = os.listdir("./models")
+        self.ids.spinner.values = models
 
     # button_exit
     def button_exit(self,widget):
@@ -101,6 +118,7 @@ class FinalApp(App):
         self.title = 'Face Mask Detector'
     pass
 
+# camera 
 class CameraPreview(Image):
     def __init__(self, **kwargs):
         super(CameraPreview, self).__init__(**kwargs)
@@ -108,7 +126,7 @@ class CameraPreview(Image):
         #self.capture = cv2.VideoCapture(0)
         self.capture = VideoStream(src=0).start()
         #Set drawing interval
-        Clock.schedule_interval(self.update, 1.0 / 60)
+        Clock.schedule_interval(self.update, 1.0 / 30)
 
     #Drawing method to execute at intervals
     def update(self, dt):
@@ -155,6 +173,7 @@ class CameraPreview(Image):
             # fix disable image on screen
             self.opacity = 0
             pass
+        #self.capture.stop()
 
 if __name__ == "__main__":
     FinalApp().run()

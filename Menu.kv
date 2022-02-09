@@ -117,3 +117,30 @@
 
         #on press
         on_press:root.button_mask(self)
+    
+
+    Label:
+        id:click_label
+        text: "[Click here]"
+        background_normal:'' 
+        color: 44/255, 62/255, 80/255, 1
+        background_color: 1,1,1,1
+        font_size: 15
+        pos_hint:{"x":.8,"center_y":.9,"left":.1}
+        size_hint:.2,.05
+        border: (10,0,0,0)
+
+    Spinner:
+        id:spinner_id
+        text:"[Choose Model]"
+        font_size: 15
+        background_normal:'' 
+        color: 44/255, 62/255, 80/255, 1
+        on_release:
+            import os
+            models = os.listdir("./models")
+            self.values = models
+        background_color: 1,1,1,1
+        on_text: root.spinner_clicked(spinner_id.text)
+        pos_hint:{"x":.8,"center_y":.9,"left":.1}
+        size_hint:.2,.04

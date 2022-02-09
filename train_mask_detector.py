@@ -1,6 +1,3 @@
-# USAGE
-# python train_mask_detector.py --dataset dataset
-
 # import the necessary packages
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import MobileNetV2
@@ -24,9 +21,12 @@ import numpy as np
 import argparse
 import os
 
+# create an input to 
+dataset = input("[INPUT] Dataset Path : ")
+
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-d", "--dataset", required=True,
+ap.add_argument("-d", "--dataset",
 	help="path to input dataset")
 ap.add_argument("-p", "--plot", type=str, default="plot.png",
 	help="path to output loss/accuracy plot")
@@ -44,7 +44,7 @@ BS = 32
 # grab the list of images in our dataset directory, then initialize
 # the list of data (i.e., images) and class images
 print("[INFO] loading images...")
-imagePaths = list(paths.list_images(args["dataset"]))
+imagePaths = list(paths.list_images(dataset))
 data = []
 labels = []
 
@@ -138,18 +138,22 @@ print(classification_report(testY.argmax(axis=1), predIdxs,
 
 # serialize the model to disk
 print("[INFO] saving mask detector model...")
-model.save(args["model"], save_format="h5")
+path = "./models/"
+model_name = input("[INPUT] MODEL NAME :") + ".model"
+model.save(path+model_name, save_format="h5")
+
+exit()
 
 # plot the training loss and accuracy
-N = EPOCHS
-plt.style.use("ggplot")
-plt.figure()
-plt.plot(np.arange(0, N), H.history["loss"], label="train_loss")
-plt.plot(np.arange(0, N), H.history["val_loss"], label="val_loss")
-plt.plot(np.arange(0, N), H.history["accuracy"], label="train_acc")
-plt.plot(np.arange(0, N), H.history["val_accuracy"], label="val_acc")
-plt.title("Training Loss and Accuracy")
-plt.xlabel("Epoch #")
-plt.ylabel("Loss/Accuracy")
-plt.legend(loc="lower left")
-plt.savefig(args["plot"])
+#N = EPOCHS
+#plt.style.use("ggplot")
+#plt.figure()
+##plt.plot(np.arange(0, N), H.history["loss"], label="train_loss")
+#plt.plot(np.arange(0, N), H.history["val_loss"], label="val_loss")
+#plt.plot(np.arange(0, N), H.history["accuracy"], label="train_acc")
+#plt.plot(np.arange(0, N), H.history["val_accuracy"], label="val_acc")
+#plt.title("Training Loss and Accuracy")
+#plt.xlabel("Epoch #")
+#plt.ylabel("Loss/Accuracy")
+#plt.legend(loc="lower left")
+#plt.savefig(args["plot"])
