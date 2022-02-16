@@ -21,6 +21,7 @@ from kivy.config import Config
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen
+from kivy.uix.textinput import TextInput
 
 # modules
 import os
@@ -36,6 +37,7 @@ current_model = ""
 Builder.load_file("Menu.kv")
 
 class Widgetfacemask(RelativeLayout):
+
     # RelativeLayout
     perspective_point_x =NumericProperty(0)
     perspective_point_x =NumericProperty(0)
@@ -65,6 +67,7 @@ class Widgetfacemask(RelativeLayout):
     # button alert
     def button_mask(self, widget):
         global checker
+        print("[Alert Clicked]")
         self.ids.button_mask.opacity = 0
         checker = False
        
@@ -72,36 +75,48 @@ class Widgetfacemask(RelativeLayout):
     def button_start(self, widget):
         global isRunning
         global checker
-        
-        if widget.state != "normal":
-            isRunning = True
-            widget.text = "Stop"
-            # disable all buttons
-            self.ids.button_train.disabled = True
-            #self.ids.button_option.disabled = True
-            self.ids.button_exit.disabled = True
+        global current_model
+        print("[Start Clicked]")
+        if current_model != "":
+            if widget.state != "normal":
+                isRunning = True
+                widget.text = "Stop"
+                # disable all buttons
+                self.ids.button_train.disabled = True
+                #self.ids.button_option.disabled = True
+                self.ids.button_exit.disabled = True
+            else:
+                isRunning = False
+                widget.text = "Start"   
+                self.ids.button_mask.opacity=0
+                checker = False
+                # enable all buttons
+                self.ids.button_train.disabled = False
+                #self.ids.button_option.disabled = False
+                self.ids.button_exit.disabled = False
         else:
-            isRunning = False
-            widget.text = "Start"   
-            self.ids.button_mask.opacity=0
-            checker = False
-            # enable all buttons
-            self.ids.button_train.disabled = False
-            #self.ids.button_option.disabled = False
-            self.ids.button_exit.disabled = False
+            self.ids.button_mask.opacity=1
+            widget.state = "normal"
 
+    #train
     def button_train(self,widget):
-        print("[]Train Face Mask Detector")
-        os.system('start cmd /k "python ./train_mask_detector.py"')
+        print("[Train Face Mask Detector]")
+        os.system('start cmd /c "python ./train_mask_detector.py"')
         
 
     #spinner
     def spinner_clicked(self, value):
         global current_model
         current_model = value
+        print("[Spinner Clicked]")
         detect_mask_video.reload_model(value)
-        self.ids.click_label.text = value
-        
+        #self.ids.click_label.text = value
+
+    #update threshold
+    def threshold_update(self, value):
+        print("[Threshold Updated]")
+        value = 0 if value == "" else value
+        detect_mask_video._threshold = int(value)
     
     #get models
     def get_model(self):

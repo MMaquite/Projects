@@ -103,9 +103,14 @@ def reload_model(var):
 
 # load our first model
 file_name = "mask_detector.model"
-reload_model("")
+#reload_model("")
+
+_threshold = 90
 
 def startVideoFeed(param,w,h):
+	global _threshold
+	thresh = _threshold
+	print("[threshold:]"+str(_threshold))
 	vs = param
 	#while True:
 	# grab the frame from the threaded video stream and resize it
@@ -135,11 +140,10 @@ def startVideoFeed(param,w,h):
 		# CHECK IF MASK IS NOT ABOVE THE GIVEN THRESHOLD:
 		_label = label
 		# only 97% up will account as mask on 
-		# # we will use this to check if the mask is worn properly or not based on the accuracy of the current model.
+		# # we will use this to check if the mask is worn properly or not, based on the accuracy of the current model.
 		
-		# since the model has a high accuracy we could just raise our threshold to determine the mask is worn properly
-		_threshold = 90
-		if label == "Mask" and max( mask, withoutMask) * 100 < _threshold: 
+		# since the model has a high accuracy we could just raise our threshold to determine if the mask is properly worn 
+		if label == "Mask" and max( mask, withoutMask) * 100 < thresh: 
 			_checker = True
 			color = (0, 0, 255)
 			#print("Mask is not worn properly")

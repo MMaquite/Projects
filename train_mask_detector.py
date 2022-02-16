@@ -22,7 +22,14 @@ import argparse
 import os
 
 # create an input to 
-dataset = input("[INPUT] Dataset Path : ")
+dataset = ""
+
+dataset = ""
+while dataset == "":
+	inp = input("[INPUT] DATASET PATH:") 
+	dataset = inp
+
+dataset = "./"+dataset+"/"
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -139,7 +146,14 @@ print(classification_report(testY.argmax(axis=1), predIdxs,
 # serialize the model to disk
 print("[INFO] saving mask detector model...")
 path = "./models/"
-model_name = input("[INPUT] MODEL NAME :") + ".model"
+
+model_name = ""
+while model_name == "":
+	inp = input("[INPUT] MODEL NAME :") 
+	model_name = inp
+
+model_name = model_name + ".model"
+#print(mode_name)
 model.save(path+model_name, save_format="h5")
 
 exit()

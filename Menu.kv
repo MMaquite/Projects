@@ -22,8 +22,6 @@
         #on press
         on_state:root.button_start(self)
 
-   
-
     Button:
         # label
         text:"Train"
@@ -102,7 +100,7 @@
      # our alert dialog 
     Button:
         # label
-        text:"please wear your mask properly."
+        text:("please wear your mask properly.") if spinner_id.text != "[Choose]" else ("please choose a model")
         id:button_mask
         opacity:0
         
@@ -117,22 +115,33 @@
 
         #on press
         on_press:root.button_mask(self)
-    
+
+    Label:
+        text: "[ Proper Mask % ]"
+        halign: "center"
+        background_normal:'' 
+        color: 44/255, 62/255, 80/255, 1
+        background_color: 189/255, 195/255, 199/255,1.0
+        font_size: 15
+        pos_hint:{"x":.65,"center_y":.95,"left":.1}
+        size_hint:.2,.05
 
     Label:
         id:click_label
-        text: "[Click here]"
+        text: "[ Model ]"
+        halign: "center"
         background_normal:'' 
         color: 44/255, 62/255, 80/255, 1
-        background_color: 1,1,1,1
+        background_color: 189/255, 195/255, 199/255,1.0
         font_size: 15
-        pos_hint:{"x":.8,"center_y":.9,"left":.1}
+        pos_hint:{"x":.79,"center_y":.95,"left":.1}
         size_hint:.2,.05
         border: (10,0,0,0)
 
     Spinner:
         id:spinner_id
-        text:"[Choose Model]"
+        text:"[Choose]"
+        halign: "center"
         font_size: 15
         background_normal:'' 
         color: 44/255, 62/255, 80/255, 1
@@ -140,7 +149,21 @@
             import os
             models = os.listdir("./models")
             self.values = models
-        background_color: 1,1,1,1
+        background_color: 255/255, 255/255, 255/255,1.0
         on_text: root.spinner_clicked(spinner_id.text)
-        pos_hint:{"x":.8,"center_y":.9,"left":.1}
+        pos_hint:{"x":.79,"center_y":.9,"left":.1}
         size_hint:.2,.04
+
+
+    TextInput:
+        id: input
+        background_normal:'' 
+        color: 44/255, 62/255, 80/255, 1
+        halign: "center"
+        font_size: 12
+        text:"90"
+        pos_hint:{"x":.7,"center_y":.9,"left":.1}
+        size_hint: 0.1, 0.05
+        on_text: root.threshold_update(input.text)
+
+    
